@@ -15,7 +15,6 @@ import java.net.UnknownHostException;
 public class ESConfig {
     @Bean
     public TransportClient client() throws UnknownHostException {
-
         //es集群连接
         TransportAddress master = new InetSocketTransportAddress(
                 InetAddress.getByName("localhost"),

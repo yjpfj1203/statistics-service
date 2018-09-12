@@ -1,19 +1,11 @@
 package com.yjpfj1203.statistics.controller;
 
 
-import com.yjpfj1203.statistics.Util.CollectionUtil;
-import com.yjpfj1203.statistics.entity.Book;
-import com.yjpfj1203.statistics.entity.repository.BookRepository;
-import org.elasticsearch.index.query.QueryBuilders;
+import com.yjpfj1203.statistics.util.CollectionUtil;
+import com.yjpfj1203.statistics.entity.es.OptLog;
+import com.yjpfj1203.statistics.entity.es.esrepository.OptLogESRepository;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
-import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
-import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -22,15 +14,15 @@ import java.util.Iterator;
 import java.util.List;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/es/logs")
 @EnableSwagger2
-public class BookController {
+public class OptLogEsController {
     @Autowired
-    private BookRepository bookRepository;
+    private OptLogESRepository optLogRepository;
 
     @GetMapping
-    public List<Book> findAll() {
-        return CollectionUtil.iterableToCollectionJava8(bookRepository.findAll());
+    public List<OptLog> findAll() {
+        return CollectionUtil.iterableToCollectionJava8(optLogRepository.findAll());
     }
 
     /**
@@ -39,8 +31,8 @@ public class BookController {
      * @return
      */
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable String id) {
-        return bookRepository.findById(id).orElse(null);
+    public OptLog findById(@PathVariable String id) {
+        return optLogRepository.findById(id).orElse(null);
     }
 
     /**
@@ -49,11 +41,11 @@ public class BookController {
      * @return
      */
     @GetMapping("/select/{q}")
-    public List<Book> testSearch(@PathVariable String q) {
+    public List<OptLog> testSearch(@PathVariable String q) {
         QueryStringQueryBuilder builder = new QueryStringQueryBuilder(q);
-        Iterable<Book> searchResult = bookRepository.search(builder);
-        Iterator<Book> iterator = searchResult.iterator();
-        List<Book> list = new ArrayList<Book>();
+        Iterable<OptLog> searchResult = optLogRepository.search(builder);
+        Iterator<OptLog> iterator = searchResult.iterator();
+        List<OptLog> list = new ArrayList<OptLog>();
         while (iterator.hasNext()) {
             list.add(iterator.next());
         }
@@ -69,7 +61,7 @@ public class BookController {
      * @return
      */
     @GetMapping("/{page}/{size}/{q}")
-    public List<Book> searchCity(@PathVariable Integer page, @PathVariable Integer size, @PathVariable String q) {
+    public List<OptLog> findList(@PathVariable Integer page, @PathVariable Integer size, @PathVariable String q) {
 
         // 分页参数
 //        Pageable pageable = new PageRequest(page, size);
@@ -86,20 +78,20 @@ public class BookController {
 //                .withPageable(pageable)
 //                .withQuery(functionScoreQueryBuilder).build();
 //
-//        Page<Book> searchPageResults = bookRepository.search(searchQuery);
+//        Page<OptLog> searchPageResults = bookRepository.search(searchQuery);
 //        return searchPageResults.getContent();
         return null;
     }
 
     /**
      * 4、增
-     * @param book
+     * @param optLog
      * @return
      */
     @PostMapping
-    public Book insertBook(@RequestBody Book book) {
-        bookRepository.save(book);
-        return book;
+    public OptLog insert(@RequestBody OptLog optLog) {
+        optLogRepository.save(optLog);
+        return optLog;
     }
 
     /**
@@ -108,20 +100,20 @@ public class BookController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public Book insertBook(@PathVariable String id) {
-        Book book = bookRepository.findById(id).orElse(null);
-        bookRepository.deleteById(id);
-        return book;
+    public OptLog delete(@PathVariable String id) {
+        OptLog optLog = optLogRepository.findById(id).orElse(null);
+        optLogRepository.deleteById(id);
+        return optLog;
     }
 
     /**
      * 6、改
-     * @param book
+     * @param optLog
      * @return
      */
     @PutMapping("{id}")
-    public Book updateBook(Book book) {
-        bookRepository.save(book);
-        return book;
+    public OptLog update(OptLog optLog) {
+        optLogRepository.save(optLog);
+        return optLog;
     }
 }

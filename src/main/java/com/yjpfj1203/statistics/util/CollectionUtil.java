@@ -1,8 +1,7 @@
-package com.yjpfj1203.statistics.Util;
+package com.yjpfj1203.statistics.util;
 
 import com.google.common.collect.Lists;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
