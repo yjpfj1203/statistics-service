@@ -14,5 +14,6 @@ spring:
       database: statistics
       username: admin
       password: admin
+    #多数据源配置，目前没有列出
 
 logging.level.org.springframework.data.mongodb.core.MongoTemplate: DEBUG
